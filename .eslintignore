@@ -1,0 +1,21 @@
+# static resources
+*.html
+*.json
+*.md
+*.mdx
+*.png
+*.jpg
+*.svg
+*.scss
+*.less
+*.graphql
+*.yml
+*.ico
+
+!.ci
+
+Dockerfile
+
+/node_modules/**
+/public/**
+/dist/**

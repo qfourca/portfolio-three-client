@@ -1,0 +1,273 @@
+{
+    "plugins": [
+        "@typescript-eslint",
+        "file-progress",
+        "import",
+        "prettier",
+        "react"
+    ],
+    "extends": [
+        "airbnb",
+        "airbnb/hooks",
+        "airbnb-typescript",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:prettier/recommended",
+        "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "rules": {
+        "@typescript-eslint/consistent-type-assertions": [
+            "warn",
+            {
+                "assertionStyle": "never"
+            }
+        ],
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "argsIgnorePattern": "^_",
+                "ignoreRestSiblings": true
+            }
+        ],
+        "@typescript-eslint/no-use-before-define": [
+            "error",
+            "nofunc"
+        ],
+        "@typescript-eslint/no-redeclare": [
+            "error",
+            {
+                "ignoreDeclarationMerge": true
+            }
+        ],
+        "file-progress/activate": 1,
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": [
+                    "jest-setup.ts",
+                    "webpack.config.*",
+                    "vite.config.ts",
+                    ".ci/**/*",
+                    "packages/*/test/**/*",
+                    "**/__benchmarks__/**/*",
+                    "**/__tests__/**/*",
+                    "**/__stories__/**/*"
+                ]
+            }
+        ],
+        "import/no-unresolved": [
+            "error",
+            {
+                "ignore": [
+                    "^@archisketch-dev-team/gearbox",
+                    "@inlet/react-pixi",
+                    "vite-plugin-babel-macros",
+                    "@"
+                ],
+                "commonjs": true,
+                "caseSensitive": true
+            }
+        ],
+        "import/order": [
+            "warn",
+            {
+                "alphabetize": {
+                    "order": "asc",
+                    "caseInsensitive": false
+                },
+                "groups": [
+                    "builtin",
+                    "external",
+                    "internal",
+                    "parent",
+                    "sibling",
+                    "index"
+                ],
+                "newlines-between": "always",
+                "pathGroups": [
+                    {
+                        "pattern": "archisketch",
+                        "group": "internal"
+                    },
+                    {
+                        "pattern": "@archisketch-dev-team/**",
+                        "group": "internal"
+                    },
+                    {
+                        "pattern": "worker-loader?inline=no-fallback!../**",
+                        "group": "parent"
+                    },
+                    {
+                        "pattern": "worker-loader?inline=no-fallback!./**",
+                        "group": "sibling"
+                    },
+                    {
+                        "pattern": "@aws-sdk/**",
+                        "group": "external",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@/**",
+                        "group": "internal",
+                        "position": "after"
+                    }
+                ],
+                "pathGroupsExcludedImportTypes": [
+                    "builtin"
+                ]
+            }
+        ],
+        "no-console": "off",
+        "no-param-reassign": [
+            "error",
+            {
+                "props": false
+            }
+        ],
+        "no-restricted-imports": [
+            "warn",
+            {
+                "paths": [
+                    {
+                        "name": "react-redux",
+                        "importNames": [
+                            "connect"
+                        ],
+                        "message": "Please use 'useDispatch' and 'useSelector' instead."
+                    },
+                    {
+                        "name": "react-i18next",
+                        "importNames": [
+                            "withTranslation",
+                            "WithTranslation"
+                        ],
+                        "message": "Please use 'useTranslation' instead."
+                    }
+                ]
+            }
+        ],
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "ForInStatement",
+                "message": "for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array."
+            },
+            {
+                "selector": "LabeledStatement",
+                "message": "Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand."
+            },
+            {
+                "selector": "WithStatement",
+                "message": "`with` is disallowed in strict mode because it makes code impossible to predict and optimize."
+            }
+        ],
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allow": [
+                    "_id"
+                ]
+            }
+        ],
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": "enum",
+                "format": [
+                    "UPPER_CASE"
+                ]
+            }
+        ],
+        "import/prefer-default-export": "off",
+        "react/function-component-definition": [
+            "error",
+            {
+                "namedComponents": [
+                    "arrow-function",
+                    "function-declaration"
+                ],
+                "unnamedComponents": "arrow-function"
+            }
+        ],
+        "react/require-default-props": "off",
+        "prettier/prettier": [
+            "warn",
+            {
+                "parser": "typescript",
+                "printWidth": 120,
+                "singleQuote": true,
+                "bracketSpacing": true,
+                "useTabs": true,
+                "semi": true,
+                "arrowParens": "always",
+                "bracketSameLine": true,
+                "jsxSingleQuote": true
+            }
+        ],
+        "react/react-in-jsx-scope": "off"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            },
+            "alias": {
+                "map": [
+                    [
+                        "@",
+                        "./packages/src"
+                    ]
+                ],
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        }
+    },
+    "overrides": [
+        {
+            "files": [
+                "**/components/**/*"
+            ],
+            "excludedFiles": [
+                "**/components/organisms/**/*",
+                "**/components/pages/**/*",
+                "**/components/three/**/*"
+            ]
+        },
+        {
+            "files": [
+                "**/config.example.ts",
+                "**/*.d.ts",
+                "**/__stories__/**/*",
+                "**/__benchmarks__/**/*",
+                "**/__tests__/**/*"
+            ],
+            "rules": {
+                "react/react-in-jsx-scope": "error",
+                "react/jsx-props-no-spreading": "off"
+            }
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+[production]
+> 0.5%
+> 0.5% in KR
+last 3 versions
+Firefox ESR
+not dead
+
+[development]
+defaults and not IE <= 11

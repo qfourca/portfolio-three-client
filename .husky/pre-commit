@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/../.ci/pre-console.sh"
+
+# `.ci/print-has-target-file.ts` 파일의 인자는 아래와 같습니다.
+# --------------------------------
+# 1. 필터링할 파일 확장자 또는 이름을 전달합니다.
+npx lint-staged && npx ts-node .ci/print-has-target-file.ts stories.tsx
