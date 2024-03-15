@@ -69,9 +69,6 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 					chunkFileNames: '[name].[hash].js',
 					assetFileNames: '[name].[hash].[ext]',
 				},
-				input: {
-					columbus: path.resolve(__dirname, './columbus.html'),
-				},
 			},
 		},
 	};
