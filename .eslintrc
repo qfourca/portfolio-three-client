@@ -203,6 +203,7 @@
             }
         ],
         "react/require-default-props": "off",
+        "react/prop-types": "off",
         "prettier/prettier": [
             "warn",
             {
