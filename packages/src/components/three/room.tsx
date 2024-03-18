@@ -7,6 +7,8 @@ import { Object3D, OrthographicCamera, PerspectiveCamera } from 'three';
 import { useAppState } from '@/hook/useAppState';
 import { SELECTION } from '@/store/selection';
 
+import room_url from '../../../asset/room.glb';
+
 import { Wall } from './wall';
 
 const ORTHOGRAPHIC_CAMERA_SIZE = 180;
@@ -14,7 +16,7 @@ const ORTHOGRAPHIC_CAMERA_SIZE = 180;
 export const Room = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(document.createElement('canvas'));
 
-	const { scene } = useGLTF('./room.glb');
+	const { scene } = useGLTF(room_url);
 
 	const perspectiveCamera = useMemo(() => new PerspectiveCamera(), []);
 	const orthographicCamera = useMemo(() => new OrthographicCamera(), []);

@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { ConfigEnv, defineConfig, loadEnv, UserConfig } from 'vite';
 import macrosPlugin from 'vite-plugin-babel-macros';
+// @ts-expect-error
+import gltf from 'vite-plugin-gltf';
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
@@ -31,7 +33,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 				overlay: true,
 			},
 		},
-		plugins: [macrosPlugin(), react(), svgr()],
+		plugins: [macrosPlugin(), react(), gltf(), svgr()],
 		resolve: {
 			extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
 			alias: [{ find: '@', replacement: path.resolve(__dirname, 'packages/src') }],

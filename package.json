@@ -19,6 +19,10 @@
 		"npm": ">=8.x <=10.x",
 		"node": ">=14.x <=20.x"
 	},
+	"typeRoots": [
+		"node_modules/@types",
+		"src/@types"
+	],
 	"author": "Geonho Kim",
 	"version": "0.0.0",
 	"license": "ISC",
@@ -66,6 +70,7 @@
 		"url-loader": "^4.1.1",
 		"vite": "^4.2.0",
 		"vite-plugin-babel-macros": "^1.0.6",
+		"vite-plugin-gltf": "^3.1.0",
 		"vite-plugin-imp": "^2.3.1",
 		"vite-plugin-svgr": "^4.2.0"
 	},
