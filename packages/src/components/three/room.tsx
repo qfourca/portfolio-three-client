@@ -1,8 +1,13 @@
 import { useGLTF } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Color, OrthographicCamera, PerspectiveCamera } from 'three';
-import { OrbitControls as OrbitControlsImpl } from 'three/examples/jsm/controls/OrbitControls';
+import { Canvas, invalidate } from '@react-three/fiber';
+import * as TWEEN from '@tweenjs/tween.js';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { Object3D, OrthographicCamera, PerspectiveCamera } from 'three';
+
+import { useAppState } from '@/hook/useAppState';
+import { SELECTION } from '@/store/selection';
+
+import { Wall } from './wall';
 
 const ORTHOGRAPHIC_CAMERA_SIZE = 180;
 
@@ -11,15 +16,12 @@ export const Room = () => {
 
 	const { scene } = useGLTF('./room.glb');
 
-	const wallColor = useMemo(() => new Color(0xe4f3f9), []);
-	const wallHoverColor = useMemo(() => new Color(0x89fcfc), []);
-
 	const perspectiveCamera = useMemo(() => new PerspectiveCamera(), []);
 	const orthographicCamera = useMemo(() => new OrthographicCamera(), []);
-	const orbitcontrol = useMemo<OrbitControlsImpl>(
-		() => new OrbitControlsImpl(orthographicCamera, canvasRef.current),
-		[orthographicCamera]
-	);
+	// const orbitcontrol = useMemo<OrbitControlsImpl>(
+	// 	() => new OrbitControlsImpl(orthographicCamera, document.createElement('div')),
+	// 	[orthographicCamera]
+	// );
 
 	useEffect(() => {
 		const frame = scene.children.find((c) => c.name === 'Plane');
@@ -29,29 +31,55 @@ export const Room = () => {
 	}, [scene, perspectiveCamera, orthographicCamera]);
 
 	const onCreate = useCallback(() => {
-		orbitcontrol.target.set(0, 3, 0);
-		orbitcontrol.update();
+		// orbitcontrol.target.set(0, 3, 0);
+		// orbitcontrol.update();
+		// orbitcontrol.enabled = false;
+		// orbitcontrol.dispose();
 		orthographicCamera.left = canvasRef.current.width / -ORTHOGRAPHIC_CAMERA_SIZE;
 		orthographicCamera.right = canvasRef.current.width / ORTHOGRAPHIC_CAMERA_SIZE;
 		orthographicCamera.top = canvasRef.current.height / ORTHOGRAPHIC_CAMERA_SIZE;
 		orthographicCamera.bottom = canvasRef.current.height / -ORTHOGRAPHIC_CAMERA_SIZE;
+		orthographicCamera.lookAt(0, 2, 0);
 		orthographicCamera.updateProjectionMatrix();
-	}, [orbitcontrol, orthographicCamera]);
+	}, [orthographicCamera]);
 
 	useEffect(() => {
 		onCreate();
 	}, [onCreate]);
 
-	// const three = useThree();
+	const { selection, hover } = useAppState();
 
-	const [isMouseHover, setIsMouseHover] = useState(false);
-	const isCursorPointer = useMemo(() => {
-		return isMouseHover;
-	}, [isMouseHover]);
+	useEffect(() => {
+		if (selection === SELECTION.GALLERY) {
+			const obj3 = new Object3D();
+			obj3.position.set(-3, 3, 0);
+			obj3.lookAt(5, 3, 0);
+
+			const t = { n: orthographicCamera.zoom };
+
+			new TWEEN.Tween(orthographicCamera.position).to(obj3.position).easing(TWEEN.Easing.Quadratic.InOut).start();
+			new TWEEN.Tween(orthographicCamera.quaternion).to(obj3.quaternion).easing(TWEEN.Easing.Quadratic.InOut).start();
+			new TWEEN.Tween(t)
+				.to({ n: 3 })
+				.easing(TWEEN.Easing.Quadratic.InOut)
+				.onUpdate((o) => {
+					orthographicCamera.zoom = o.n;
+					orthographicCamera.updateProjectionMatrix();
+				})
+				.start();
+		}
+	}, [orthographicCamera, orthographicCamera.position, orthographicCamera.rotation, selection]);
+
+	useEffect(() => {
+		const i = setInterval(() => {
+			if (TWEEN.update()) invalidate();
+		}, 1000 / 60);
+		return () => clearInterval(i);
+	}, []);
 
 	return (
 		<Canvas
-			style={{ width: '100%', height: '100%', cursor: isCursorPointer ? 'pointer' : 'default' }}
+			style={{ width: '100%', height: '100%', cursor: hover === SELECTION.NONE ? 'default' : 'pointer' }}
 			ref={canvasRef}
 			dpr={window.devicePixelRatio}
 			camera={orthographicCamera}
@@ -67,30 +95,7 @@ export const Room = () => {
 				<meshStandardMaterial color={new Color(0xff0000)} />
 			</mesh> */}
 
-			<mesh position={[0, 0, 0]} rotation={[Math.PI + Math.PI / 2, 0, 0]}>
-				<planeGeometry args={[10, 10]} />
-				<meshStandardMaterial color={new Color(0xf9f9e4)} />
-			</mesh>
-			<mesh position={[0, 3, -5]} rotation={[0, 0, 0]}>
-				<planeGeometry args={[10, 6]} />
-				<meshStandardMaterial color={wallColor} />
-			</mesh>
-			<mesh position={[0, 3, 5]} rotation={[Math.PI, 0, 0]}>
-				<planeGeometry args={[10, 6]} />
-				<meshStandardMaterial color={wallColor} />
-			</mesh>
-			<mesh position={[5, 3, 0]} rotation={[0, -Math.PI / 2, 0]}>
-				<planeGeometry args={[10, 6]} />
-				<meshStandardMaterial color={wallColor} />
-			</mesh>
-			<mesh
-				position={[-5, 3, 0]}
-				rotation={[0, Math.PI / 2, 0]}
-				onPointerEnter={() => setIsMouseHover(true)}
-				onPointerLeave={() => setIsMouseHover(false)}>
-				<planeGeometry args={[10, 6]} />
-				<meshStandardMaterial color={isMouseHover ? wallHoverColor : wallColor} />
-			</mesh>
+			<Wall />
 			<primitive object={scene} />
 		</Canvas>
 	);
